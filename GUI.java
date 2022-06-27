@@ -6,25 +6,13 @@
  * back-end work.
  */
 
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.text.DecimalFormat;
-
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.Timer;
 
 public class GUI {
     public GUI() { //constructor
-        
         Holder h = new Holder();
         Player p = new Player();
         Dealer d = new Dealer();
@@ -35,28 +23,54 @@ public class GUI {
         JButton buttonExit = new JButton("Exit");
         JButton buttonHit = new JButton("Hit");
         JButton buttonStand = new JButton("Stand");
-
+        JLabel l = new JLabel();
+        l.setText(p.totalScore());
+    
         buttonExit.setLayout(null);
         buttonExit.setBounds(475, 400, 50, 40);
         buttonHit.setBounds(400, 400, 50, 40);
         buttonStand.setBounds(550, 400, 50, 40);
+        l.setBounds(50, 50, 150, 50);
         
         f.add(buttonExit);
         f.add(buttonHit);
         f.add(buttonStand);
+        f.add(l);
+
 
         buttonExit.addActionListener(e -> { //when exit button is clicked, it saves the progress of the account and the prices
             System.exit(0); //and exits the program
         });
 
         buttonHit.addActionListener(e -> { //when reset button is clicked, it resets the balance and asset held by the account
-            p.getCard();
+            p.setCardArray(p.getCard());
+            System.out.println(p.getCardArray());
+            p.totalScore();
+            if (p.checkTotal() == 21) {
+                while (h.checkGame(p.checkTotal(), d.checkTotal(), d) == false) {
+                    h.checkGame(p.checkTotal(), d.checkTotal(), d);
+                }
+                JDialog win = new JDialog(f, "dialog Box");
+            } else if (p.checkTotal() > 21) {
+                System.out.println("Lost");
+                JDialog lose = new JDialog(f, "dialog Box");
+                JLabel ll = new JLabel("this is a dialog box");
+                lose.add(ll);
+                lose.setSize(100, 100);
+                lose.setVisible(true);
+                JButton buttonReset = new JButton("Stand");
+                buttonReset.setBounds(550, 400, 50, 40);
+                lose.add(buttonReset);
+                buttonHit.addActionListener(ev -> {
+                    p.resetTotal();
+                    d.resetTotal();
+                });
+            }
         });
 
         //properties of the frame
         f.setSize(1000,500);
         f.setLayout(null);  
         f.setVisible(true);
-           
     }
 }
