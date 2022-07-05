@@ -22,14 +22,14 @@ public class GUI {
         JFrame f = new JFrame("Blackjack");
         JButton buttonExit = new JButton("Exit");
         JButton buttonHit = new JButton("Hit");
-        JButton buttonStand = new JButton("Stand");
+        JButton buttonStand = new JButton("Std");
         JLabel l = new JLabel();
         l.setText(p.totalScore());
     
         buttonExit.setLayout(null);
-        buttonExit.setBounds(475, 400, 50, 40);
-        buttonHit.setBounds(400, 400, 50, 40);
-        buttonStand.setBounds(550, 400, 50, 40);
+        buttonExit.setBounds(475, 400, 70, 40);
+        buttonHit.setBounds(400, 400, 70, 40);
+        buttonStand.setBounds(550, 400, 70, 40);
         l.setBounds(50, 50, 150, 50);
         
         f.add(buttonExit);
@@ -45,20 +45,16 @@ public class GUI {
         buttonHit.addActionListener(e -> { //when reset button is clicked, it resets the balance and asset held by the account
             p.setCardArray(p.getCard());
             System.out.println(p.getCardArray());
-            p.totalScore();
-            if (p.checkTotal() == 21) {
-                while (h.checkGame(p.checkTotal(), d.checkTotal(), d) == false) {
-                    h.checkGame(p.checkTotal(), d.checkTotal(), d);
-                }
-                JDialog win = new JDialog(f, "dialog Box");
-            } else if (p.checkTotal() > 21) {
+            System.out.println(p.totalScore());
+            Boolean playerEnd = p.playerEnd(p.checkTotal(), d.checkTotal(), d);
+            if (playerEnd == true) {
                 System.out.println("Lost");
-                JDialog lose = new JDialog(f, "dialog Box");
-                JLabel ll = new JLabel("this is a dialog box");
+                JDialog lose = new JDialog(f, "Dialog Lost");
+                JLabel ll = new JLabel("Label Lost");
                 lose.add(ll);
                 lose.setSize(100, 100);
                 lose.setVisible(true);
-                JButton buttonReset = new JButton("Stand");
+                JButton buttonReset = new JButton("Reset");
                 buttonReset.setBounds(550, 400, 50, 40);
                 lose.add(buttonReset);
                 buttonHit.addActionListener(ev -> {
@@ -68,6 +64,34 @@ public class GUI {
             }
         });
 
+        buttonStand.addActionListener(e -> { //when reset button is clicked, it resets the balance and asset held by the account
+            System.out.println(d.getCardArray());
+            System.out.println(d.totalScore());
+            Boolean dealerEnd = d.dealerEnd(p.checkTotal(), d.checkTotal(), d);
+            Boolean dealerAbove16 = false;
+            System.out.println("Std");
+            JDialog lose = new JDialog();
+            JLabel ll =  new JLabel();
+            while (dealerAbove16 == false) {
+                d.getCard();
+                p.dealerAbove16(p.checkTotal(), d.checkTotal(), d);
+            }
+            if (dealerEnd == true) {
+                lose = new JDialog(f, "Dialog Stand");
+                ll = new JLabel("Label Stand");
+                
+            } else {
+                d.checkGame(p.checkTotal(), d.checkTotal(), d);
+            }
+            lose.add(ll);
+                lose.setSize(100, 100);
+                lose.setVisible(true);
+                buttonStand.addActionListener(ev -> {
+                p.resetTotal();
+                d.resetTotal();
+                });
+
+        });
         //properties of the frame
         f.setSize(1000,500);
         f.setLayout(null);  

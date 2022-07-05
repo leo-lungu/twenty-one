@@ -21,6 +21,7 @@ public class Player extends Holder {
     }
 
     public String totalScore() {
+        this.total = 0;
         for (int i = 0; i < playerCards.size(); i++) {
             this.total = this.total + switchInteger(playerCards.get(i));
         }
