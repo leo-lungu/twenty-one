@@ -19,7 +19,7 @@ public class Cards
     }
     
     public Card getCard() {
-        //System.out.println(this.deckCards);
+        System.out.println(deck);
         return deck.remove(0);
     }
 

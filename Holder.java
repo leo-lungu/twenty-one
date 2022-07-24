@@ -6,11 +6,7 @@ public class Holder {
     }
 
     public Card getCard() {
-        checkTotal();
         return c.getCard();
-    }
-
-    private void checkTotal() {
     }
 
     public Boolean playerEnd(int player, int dealer, Dealer d) {
@@ -25,25 +21,36 @@ public class Holder {
 
     public Boolean dealerAbove16(int player, int dealer, Dealer d){ 
         Boolean dealerAbove16 = true;
+        System.out.println(dealer);
         if (dealer < 16) {
             dealerAbove16 = false;
         }
+        System.out.println("bool:" + dealerAbove16);
         return dealerAbove16;
     }
     public Boolean dealerEnd(int player, int dealer, Dealer d) {
         Boolean dealerLoss = false;
-        if (dealer > 22) {
+        if (dealer > 21) {
             dealerLoss = true;
         }
         return dealerLoss;
     }
     
     public Boolean checkGame(int player, int dealer, Dealer d) {
-        Boolean playerLoss = playerEnd(player, dealer, d);
-        Boolean dealerLoss = dealerEnd(player, dealer, d);
-        return true;
+        Boolean playerLoss = false;
+        if (player < dealer) {
+            playerLoss = true;
+        }
+        return playerLoss;
     }
 
+    public Boolean checkDraw(int player, int dealer, Dealer d) {
+        Boolean draw = false;
+        if (player == dealer) {
+            draw = true;
+        }
+        return draw;
+    }
 
     public void start() {
         for (int i = 0; i < 2; i++) {
